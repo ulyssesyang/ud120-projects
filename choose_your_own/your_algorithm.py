@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+from time import time
 import matplotlib.pyplot as plt
 from prep_terrain_data import makeTerrainData
 from class_vis import prettyPicture
@@ -24,21 +24,51 @@ plt.scatter(grade_slow, bumpy_slow, color = "r", label="slow")
 plt.legend()
 plt.xlabel("bumpiness")
 plt.ylabel("grade")
-plt.show()
+# plt.show()
 ################################################################################
 
 
 ### your code here!  name your classifier object clf if you want the 
 ### visualization code (prettyPicture) to show you the decision boundary
 
+## k-nearest neighbors
+from sklearn.neighbors.nearest_centroid import NearestCentroid
+clf = NearestCentroid()
+T0 = time()
+clf = clf.fit(features_train, labels_train)
+print("nearest neighbors nearest centroid training time:", round(time()-T0, 3), "s")
+T1 = time()
+PRED = clf.predict(features_test)
+print("nearest neighbors nearest centroid predition time:", round(time()-T1, 3), "s")
+ACC = clf.score(features_test, labels_test)
+print(ACC)
 
+# ## adaboost
+from sklearn import ensemble
+clf = ensemble.AdaBoostClassifier()
+T0 = time()
+clf = clf.fit(features_train, labels_train)
+print("adaboost training time:", round(time()-T0, 3), "s")
+T1 = time()
+PRED = clf.predict(features_test)
+print("adaboost predition time:", round(time()-T1, 3), "s")
+ACC = clf.score(features_test, labels_test)
+print(ACC)
 
-
-
-
-
+# ## random forest
+from sklearn import ensemble
+clf = ensemble.RandomForestRegressor()
+T0 = time()
+clf = clf.fit(features_train, labels_train)
+print("Random Forests training time:", round(time()-T0, 3), "s")
+T1 = time()
+PRED = clf.predict(features_test)
+print("Random Forests predition time:", round(time()-T1, 3), "s")
+ACC = clf.score(features_test, labels_test)
+print(ACC)
 
 try:
     prettyPicture(clf, features_test, labels_test)
+    plt.show()
 except NameError:
     pass
